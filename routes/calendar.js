@@ -2,14 +2,12 @@
  * routes/calendar.js
  *
  * Handles POST /api/calendar
- * Creates a Google Calendar event for the authenticated user.
- * Protected by authGuard middleware — Firebase token required.
+ * Generates a Google Calendar web link for the user to manually add the event.
  *
  * Request:  { title, date, description }
- * Response: { eventId, eventUrl }
+ * Response: { calendarUrl }
  *
  * Rate limit: 10 req/min per IP (middleware/rateLimit.js)
- * Auth required: Yes — Bearer token via authGuard
  *
  * @module routes/calendar
  */
@@ -17,7 +15,6 @@
 'use strict';
 
 const express = require('express');
-const { google } = require('googleapis');
 
 const { createRateLimiter }     = require('../middleware/rateLimit');
 const { validateCalendarInput } = require('../middleware/validate');
@@ -28,80 +25,34 @@ const router = express.Router();
 router.use(createRateLimiter(RATE_LIMIT_CALENDAR));
 
 /**
- * Builds a Google Calendar API client authenticated with the user's OAuth token.
- *
- * @param {string} accessToken - User's Google OAuth access token
- * @returns {import('googleapis').calendar_v3.Calendar} - Authenticated Calendar client
- */
-function buildCalendarClient(accessToken) {
-  const auth = new google.auth.OAuth2();
-  auth.setCredentials({ access_token: accessToken });
-  return google.calendar({ version: 'v3', auth });
-}
-
-/**
- * Creates a Google Calendar event on the user's primary calendar.
- *
- * @param {string} accessToken - User's Google OAuth access token
- * @param {string} title       - Event title/summary
- * @param {string} date        - ISO 8601 date string
- * @param {string} description - Event description body
- * @returns {Promise<{ eventId: string, eventUrl: string }>}
- * @throws {Error} - If Google Calendar API call fails
- */
-async function createCalendarEvent(accessToken, title, date, description) {
-  const calendarClient = buildCalendarClient(accessToken);
-
-  const event = {
-    summary:     title,
-    description: description,
-    start: { date: date.slice(0, 10), timeZone: 'Asia/Kolkata' },
-    end:   { date: date.slice(0, 10), timeZone: 'Asia/Kolkata' },
-    reminders: {
-      useDefault: false,
-      overrides: [
-        { method: 'popup', minutes: 24 * 60 },
-        { method: 'popup', minutes: 60 },
-      ],
-    },
-  };
-
-  const response = await calendarClient.events.insert({
-    calendarId:  'primary',
-    requestBody: event,
-  });
-
-  return { eventId: response.data.id, eventUrl: response.data.htmlLink };
-}
-
-/**
  * POST /api/calendar
- * Creates a Google Calendar reminder for the authenticated user.
+ * Generates a Google Calendar link for the event.
  *
  * @param {import('express').Request}  req
  * @param {import('express').Response} res
  */
 async function handleCalendar(req, res) {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
-        success: false,
-        message: 'Google OAuth Access Token is required.',
-      });
-    }
-    const accessToken = authHeader.slice('Bearer '.length).trim();
+    const input = validateCalendarInput(req.body);
 
-    const input               = validateCalendarInput(req.body);
-    const { eventId, eventUrl } = await createCalendarEvent(
-      accessToken, input.title, input.date, input.description
-    );
-    return res.status(HTTP_STATUS.OK).json({ eventId, eventUrl });
+    const baseUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+    const text = encodeURIComponent(input.title);
+    
+    // Format dates for Google Calendar URL (YYYYMMDD)
+    const formattedDate = input.date.replace(/-/g, '').slice(0, 8);
+    // Setting an all day event for the specific date
+    const dates = encodeURIComponent(`${formattedDate}/${formattedDate}`);
+    
+    const details = encodeURIComponent(input.description);
+
+    const calendarUrl = `${baseUrl}&text=${text}&dates=${dates}&details=${details}`;
+
+    return res.status(HTTP_STATUS.OK).json({ calendarUrl });
   } catch (error) {
     console.error('[calendar] Error:', error.message);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
       success: false,
-      message: 'Could not add to calendar. Please try again.',
+      message: 'Could not generate calendar link. Please try again.',
     });
   }
 }

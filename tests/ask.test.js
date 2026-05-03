@@ -74,4 +74,52 @@ describe('POST /api/ask', () => {
     expect(res.statusCode).toBe(400);
   });
 
+  test('should return 400 for question exceeding 500 characters', async () => {
+    const longQuestion = 'a'.repeat(501);
+    const res = await request(app)
+      .post('/api/ask')
+      .send({
+        question: longQuestion,
+        language: 'en'
+      });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+  });
+
+  test('should return 400 for unsupported language code', async () => {
+    const res = await request(app)
+      .post('/api/ask')
+      .send({
+        question: 'How do I vote?',
+        language: 'zz'
+      });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+  });
+
+  test('should return 400 for missing question field', async () => {
+    const res = await request(app)
+      .post('/api/ask')
+      .send({
+        language: 'hi'
+      });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+  });
+
+  test('should return 400 for XSS payload in question', async () => {
+    const res = await request(app)
+      .post('/api/ask')
+      .send({
+        question: '<script>alert("xss")</script>',
+        language: 'en'
+      });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+  });
+
 });

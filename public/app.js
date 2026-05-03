@@ -1,3 +1,10 @@
+// ── Constants & Mappings ──────────────────────────────────────
+const LANGUAGE_CODES = {
+  en: 'en-IN', hi: 'hi-IN', ta: 'ta-IN', te: 'te-IN',
+  kn: 'kn-IN', ml: 'ml-IN', bn: 'bn-IN', mr: 'mr-IN',
+  gu: 'gu-IN', pa: 'pa-IN',
+};
+
 // ── Onboarding Data ─────────────────────────────────────────────
 const questions = [
   {
@@ -132,12 +139,173 @@ function renderQuestion(idx) {
 
 }
 
+// All Indian states for the picker
+const ALL_STATES = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+  'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
+  'Madhya Pradesh', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland',
+  'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tripura',
+  'Uttarakhand', 'West Bengal',
+  'Andaman & Nicobar Islands', 'Chandigarh', 'Delhi', 'Jammu & Kashmir',
+  'Ladakh', 'Lakshadweep', 'Puducherry'
+];
+
+// Additional languages for the "Other" picker
+const OTHER_LANGS = [
+  { icon: '🌿', label: 'ಕನ್ನಡ',   sub: 'Kannada', code: 'kn' },
+  { icon: '🌴', label: 'മലയാളം', sub: 'Malayalam', code: 'ml' },
+  { icon: '🌸', label: 'বাংলা',   sub: 'Bengali', code: 'bn' },
+  { icon: '🏵️', label: 'मराठी',  sub: 'Marathi', code: 'mr' },
+  { icon: '🌾', label: 'ਪੰਜਾਬੀ', sub: 'Punjabi', code: 'pa' },
+];
+
+function showStatePicker() {
+  const container = document.getElementById('options-container');
+  container.innerHTML = `
+    <div style="position:relative;margin-bottom:12px;">
+      <div style="
+        position:absolute;left:16px;top:50%;transform:translateY(-50%);
+        font-size:15px;pointer-events:none;
+      ">🔍</div>
+      <input
+        id="state-search"
+        type="text"
+        placeholder="Search your state..."
+        autocomplete="off"
+        oninput="filterStates(this.value)"
+        style="
+          width:100%;padding:15px 16px 15px 44px;
+          border-radius:16px;
+          background:rgba(255,255,255,0.05);
+          border:1px solid rgba(255,255,255,0.12);
+          color:var(--chalk);
+          font-family:var(--font-body);
+          font-size:15px;
+          outline:none;
+          transition:all 0.2s;
+        "
+        onfocus="this.style.borderColor='rgba(255,107,0,0.5)';this.style.background='rgba(255,107,0,0.05)';this.style.boxShadow='0 0 0 3px rgba(255,107,0,0.1)'"
+        onblur="this.style.borderColor='rgba(255,255,255,0.12)';this.style.background='rgba(255,255,255,0.05)';this.style.boxShadow='none'"
+      />
+    </div>
+    <div id="state-results" style="
+      display:flex;flex-direction:column;gap:6px;
+      max-height:300px;overflow-y:auto;
+      scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;
+    ">
+      ${ALL_STATES.map(s => `
+        <div class="option-card"
+             onclick="pickState('${s}')"
+             role="button" tabindex="0" aria-label="${s}"
+             style="padding:14px 18px;">
+          <div class="option-icon" style="width:32px;height:32px;font-size:14px;">🏛️</div>
+          <div>
+            <div class="option-label" style="font-size:14px;">${s}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  // Auto-focus the search box
+  setTimeout(() => document.getElementById('state-search').focus(), 50);
+}
+
+function filterStates(query) {
+  const q = query.toLowerCase();
+  const results = document.getElementById('state-results');
+  const filtered = ALL_STATES.filter(s => s.toLowerCase().includes(q));
+  results.innerHTML = filtered.length ? filtered.map(s => `
+    <div class="option-card"
+         onclick="pickState('${s}')"
+         role="button" tabindex="0" aria-label="${s}"
+         style="padding:14px 18px;">
+      <div class="option-icon" style="width:32px;height:32px;font-size:14px;">🏛️</div>
+      <div>
+        <div class="option-label" style="font-size:14px;">${s}</div>
+      </div>
+    </div>
+  `).join('') : `<p style="color:var(--muted);text-align:center;padding:24px;font-size:13px;">No state found for "${query}"</p>`;
+}
+
+function pickState(stateName) {
+  answers[0] = stateName;
+  currentQ = 1;
+  renderQuestion(1);
+}
+
+function showLangPicker() {
+  const container = document.getElementById('options-container');
+  container.innerHTML = `
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:12px;">Choose your language:</p>
+    ${OTHER_LANGS.map(l => `
+      <div class="option-card" style="margin-bottom:10px;"
+           onclick="selectOtherLang('${l.label}','${l.code}',this)"
+           role="button" tabindex="0" aria-label="${l.sub}">
+        <div class="option-icon">${l.icon}</div>
+        <div>
+          <div class="option-label">${l.label}</div>
+          <div class="option-sublabel">${l.sub}</div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function selectOtherLang(label, code, el) {
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[3] = label;
+  userLanguage = code;
+  setTimeout(() => launchApp(), 500);
+}
+
+function showIneligible() {
+  const content = document.getElementById('onboard-content');
+  content.innerHTML = `
+    <div class="onboard-q-enter" style="text-align:center;padding:40px 20px;">
+      <div style="font-size:3rem;margin-bottom:16px;">🌱</div>
+      <h2 style="font-size:1.6rem;margin-bottom:12px;">Not Yet Eligible</h2>
+      <p style="color:var(--muted);line-height:1.7;max-width:360px;margin:0 auto 28px;">
+        You must be <strong>18 years or older</strong> on the qualifying date to vote in India.
+        Come back when you turn 18 — your voice will matter! 🗳️
+      </p>
+      <button onclick="goBack()" style="
+        padding:12px 28px;border-radius:12px;
+        background:var(--surface);border:1.5px solid rgba(255,255,255,0.15);
+        color:var(--text);font-size:0.95rem;cursor:pointer;
+      ">← Go back</button>
+    </div>
+  `;
+}
+
 function selectOption(qIdx, value, el) {
+  // Special case: "Other state" on Q1 — show state picker
+  if (qIdx === 0 && value === 'Other state') {
+    el.classList.add('selected');
+    showStatePicker();
+    return;
+  }
+
+  // Special case: "Under 18" on Q2 — show ineligibility message
+  if (qIdx === 1 && value === 'Under 18') {
+    el.classList.add('selected');
+    answers[1] = value;
+    setTimeout(() => showIneligible(), 400);
+    return;
+  }
+
+  // Special case: "Other" language on Q4 — show language sub-picker
+  if (qIdx === 3 && value === 'Other') {
+    el.classList.add('selected');
+    showLangPicker();
+    return;
+  }
+
   document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   answers[qIdx] = value;
+
   if (qIdx === 3) {
-    // Map language label to BCP-47 code
     const langMap = { 'हिन्दी': 'hi', 'தமிழ்': 'ta', 'తెలుగు': 'te', 'English': 'en' };
     userLanguage = langMap[value] || 'en';
   }
@@ -360,26 +528,52 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   recognition = new SR();
   recognition.continuous = false;
   recognition.interimResults = false;
+
   recognition.onresult = (event) => {
     document.getElementById('chat-input').value = event.results[0][0].transcript;
-    recording = false;
-    document.getElementById('mic-btn').classList.remove('recording');
+    stopMic();
   };
+
   recognition.onend = () => {
-    recording = false;
-    document.getElementById('mic-btn').classList.remove('recording');
+    stopMic();
   };
+
+  recognition.onerror = (event) => {
+    // Display the exact error in the input box so the user can see it!
+    const input = document.getElementById('chat-input');
+    if (input && event.error !== 'no-speech') {
+      input.value = `[Mic Error: ${event.error}]`;
+      input.style.color = 'salmon';
+      setTimeout(() => { input.style.color = ''; input.value = ''; }, 3000);
+    }
+    console.warn('[voice] Recognition error:', event.error);
+    stopMic();
+  };
+}
+
+function stopMic() {
+  recording = false;
+  const btn = document.getElementById('mic-btn');
+  const input = document.getElementById('chat-input');
+  if (btn) btn.classList.remove('recording');
+  if (input) input.style.opacity = '1';
+  try { recognition.stop(); } catch (e) { /* already stopped */ }
 }
 
 function toggleMic() {
   if (!recognition) { alert('Speech recognition not supported in this browser.'); return; }
-  const btn = document.getElementById('mic-btn');
   if (recording) {
-    recognition.stop();
+    stopMic();
   } else {
-    recognition.start();
-    recording = true;
-    btn.classList.add('recording');
+    try {
+      document.getElementById('chat-input').value = '';
+      recognition.lang = LANGUAGE_CODES[userLanguage] || 'en-IN';
+      recognition.start();
+      recording = true;
+      document.getElementById('mic-btn').classList.add('recording');
+    } catch (e) {
+      stopMic();
+    }
   }
 }
 

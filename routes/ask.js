@@ -36,6 +36,7 @@ const {
 
 const router = express.Router();
 const cache  = new NodeCache({ stdTTL: CACHE_TTL_SECONDS });
+const genAI  = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // ── Apply rate limiting before handler ────────────────────────────────
 router.use(createRateLimiter(RATE_LIMIT_ASK));
@@ -137,7 +138,6 @@ function buildCacheKey(question, language, state, phase, isFirstTime, history) {
  * @throws {Error}              - If Gemini API call or JSON parse fails
  */
 async function callGemini(question, history, language, state, phase, isFirstTime) {
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({
     model: GEMINI_MODEL,
     systemInstruction: buildSystemPrompt(language, state, phase, isFirstTime),

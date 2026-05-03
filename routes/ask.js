@@ -28,9 +28,6 @@ const {
   CACHE_TTL_SECONDS,
   RATE_LIMIT_ASK,
   GEMINI_MODEL,
-  ELECTION_KEYWORDS,
-  GEMINI_ACTIONS,
-  JOURNEY_PHASES,
   HTTP_STATUS,
 } = require('../constants');
 
@@ -41,17 +38,7 @@ const genAI  = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // ── Apply rate limiting before handler ────────────────────────────────
 router.use(createRateLimiter(RATE_LIMIT_ASK));
 
-/**
- * Checks whether a user's question is related to Indian elections.
- * Used as Layer 1 topic guard before calling Gemini (saves API quota).
- *
- * @param {string} text - The user's raw question text
- * @returns {boolean}   - true if election-related, false otherwise
- */
-function isElectionRelated(text) {
-  const lowerText = text.toLowerCase();
-  return ELECTION_KEYWORDS.some((keyword) => lowerText.includes(keyword));
-}
+// isElectionRelated removed (handled inside the LLM prompt instead)
 
 /**
  * Builds the Gemini system prompt with injected user context.

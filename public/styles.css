@@ -179,6 +179,32 @@ body::before {
 }
 .btn-ghost:hover { color: var(--chalk); }
 
+.btn-google {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--chalk);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 14px 28px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out);
+  backdrop-filter: blur(8px);
+}
+.btn-google:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.03);
+  box-shadow: 0 6px 24px rgba(66, 133, 244, 0.25);
+}
+.btn-google svg { flex-shrink: 0; }
+
+.hero-cta { gap: 14px; flex-wrap: wrap; }
+
 /* ── Onboarding Screen ────────────────────────────────────────── */
 #onboarding {
   display: none;

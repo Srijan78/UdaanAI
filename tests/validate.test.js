@@ -8,7 +8,6 @@
 
 const { 
   validateAskInput, 
-  validateTtsInput, 
   validateBoothInput 
 } = require('../middleware/validate');
 

@@ -54,7 +54,7 @@ let userLanguage = 'en';
 let userState = 'India';
 let userPhase = 'registration';
 let userIsFirstTime = false;
-let conversationHistory = [];
+const conversationHistory = [];
 
 // ── Screen Navigation ────────────────────────────────────────────
 function goToOnboarding() {
@@ -308,6 +308,8 @@ function selectOption(qIdx, value, el) {
   if (qIdx === 3) {
     const langMap = { 'हिन्दी': 'hi', 'தமிழ்': 'ta', 'తెలుగు': 'te', 'English': 'en' };
     userLanguage = langMap[value] || 'en';
+    setTimeout(() => launchApp(), 500);
+    return;
   }
 
   setTimeout(() => {
@@ -345,6 +347,10 @@ function launchApp() {
       setTimeout(() => {
         hideTyping();
         addAIMessage(greeting, ['Check Electoral Roll at voters.eci.gov.in', 'Collect one valid photo ID', 'Find your polling booth'], true);
+        // Now the full UI is rendered — safe to translate
+        if (userLanguage && userLanguage !== 'en') {
+          setTimeout(() => translatePage(userLanguage), 400);
+        }
       }, 1500);
     }, 600);
   }, 400);
@@ -440,7 +446,7 @@ function addAIMessage(text, checklistItems = null, calendarOffer = false) {
       ${checklistHTML}
       <div class="msg-actions">
         <button class="msg-action-btn listen" aria-label="Listen to this message" data-text="${text.replace(/"/g, '&quot;')}" onclick="playTTS(this, this.getAttribute('data-text'))">🔊 Listen</button>
-        ${calendarOffer ? `<button class="msg-action-btn calendar" aria-label="Add to Google Calendar" onclick="addToCalendar()">📅 Add reminder</button>` : ''}
+        ${calendarOffer ? `<button class="msg-action-btn calendar" aria-label="Add to Google Calendar" onclick="addCalendarReminder()">📅 Add reminder</button>` : ''}
       </div>
     </div>
   `;
@@ -623,3 +629,185 @@ async function addToCalendar() {
     console.error('Calendar error:', e);
   }
 }
+
+
+// -- Google Authentication & Calendar --------------------------------
+
+function triggerGoogleSignIn() {
+  if (typeof google === 'undefined' || !google.accounts) {
+    alert('Google Sign-In is loading, please try again in a moment.');
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: '980737393693-8u5mn4dcld2vcpg6n1b83q4n1tmti66k.apps.googleusercontent.com',
+    callback: handleCredentialResponse,
+    ux_mode: 'popup',
+  });
+  google.accounts.id.prompt();
+}
+
+async function handleCredentialResponse(response) {
+  try {
+    const res = await fetch('/api/auth/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential })
+    });
+    const data = await res.json();
+    if (data.success) {
+      // Persist user session so avatar survives page refresh
+      localStorage.setItem('udaanai_user', JSON.stringify(data.user));
+      applyUserSession(data.user);
+      // Proceed to onboarding after sign-in
+      goToOnboarding();
+    }
+  } catch (e) {
+    console.error('Login failed', e);
+  }
+}
+
+/** Apply a stored user session — updates both hero avatar and topbar avatar */
+function applyUserSession(user) {
+  if (!user || !user.name) return; // Guard against bad data
+
+  // Hero page: hide Sign-In button, show avatar
+  const signinBtn = document.getElementById('google-signin-btn');
+  if (signinBtn) signinBtn.style.display = 'none';
+
+  // Hero avatar
+  const heroAvatar = document.getElementById('user-avatar');
+  if (heroAvatar) {
+    heroAvatar.style.display = 'flex';
+    if (user.picture) {
+      heroAvatar.style.backgroundImage = 'url(' + user.picture + ')';
+      heroAvatar.style.backgroundSize = 'cover';
+      heroAvatar.innerText = '';
+    } else {
+      heroAvatar.innerText = user.name.charAt(0).toUpperCase();
+    }
+  }
+
+  // Topbar avatar (inside the app screen)
+  const topbarAvatar = document.getElementById('user-initial');
+  if (topbarAvatar) {
+    if (user.picture) {
+      topbarAvatar.style.backgroundImage = 'url(' + user.picture + ')';
+      topbarAvatar.style.backgroundSize = 'cover';
+      topbarAvatar.innerText = '';
+    } else {
+      topbarAvatar.innerText = user.name.charAt(0).toUpperCase();
+    }
+  }
+}
+
+/** Restore login state from localStorage on every page load */
+function restoreUserSession() {
+  const stored = localStorage.getItem('udaanai_user');
+  if (stored) {
+    try {
+      const user = JSON.parse(stored);
+      if (user && user.name) {
+        applyUserSession(user);
+      } else {
+        localStorage.removeItem('udaanai_user'); // Bad data, purge it
+      }
+    } catch (e) {
+      localStorage.removeItem('udaanai_user');
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', restoreUserSession);
+
+function addCalendarReminder() {
+  // Try reusing a cached access token first
+  const cachedToken = localStorage.getItem('udaanai_calendar_token');
+  if (cachedToken) {
+    insertCalendarEvent(cachedToken);
+    return;
+  }
+
+  // No cached token — request one via OAuth popup
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: '980737393693-8u5mn4dcld2vcpg6n1b83q4n1tmti66k.apps.googleusercontent.com',
+    scope: 'https://www.googleapis.com/auth/calendar.events',
+    callback: async (tokenResponse) => {
+      if (tokenResponse && tokenResponse.access_token) {
+        localStorage.setItem('udaanai_calendar_token', tokenResponse.access_token);
+        insertCalendarEvent(tokenResponse.access_token);
+      }
+    }
+  });
+  client.requestAccessToken();
+}
+
+async function insertCalendarEvent(accessToken) {
+  try {
+    const res = await fetch('/api/calendar/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessToken, state: answers[0], phase: activePhase })
+    });
+    const data = await res.json();
+    if (data.success) {
+      window.open(data.eventLink, '_blank');
+    } else {
+      if (data.message && data.message.toLowerCase().includes('invalid')) {
+        // Token expired — clear cache and retry
+        localStorage.removeItem('udaanai_calendar_token');
+        addCalendarReminder();
+      } else {
+        // Log and alert other errors (e.g., Google OAuth Test User restrictions)
+        console.error('Calendar API Error:', data.message);
+        alert('Could not add reminder: ' + data.message + '\n\n(If testing, ensure your email is added as a Test User in Google Cloud Console)');
+        localStorage.removeItem('udaanai_calendar_token');
+      }
+    }
+  } catch (e) {
+    console.error('Calendar fetch error', e);
+    localStorage.removeItem('udaanai_calendar_token');
+  }
+}
+
+
+
+async function translatePage(langCode) {
+  if (langCode === 'en') return;
+
+  // Target only meaningful text elements using the actual class names from index.html
+  const selectors = [
+    '.phase-name',         // Sidebar nav: "Am I ready?", "Election Day", "After Voting"
+    '.phase-desc',         // Sidebar nav subtitles
+    '.sidebar-section-label', // "Navigation", "Quick Actions"
+    '.journey-item-label', // Right panel checklist items
+    '.journey-section-title', // Right panel "Phase 1 — Am I Ready?" etc
+    '.stat-label',         // "Days to vote", "Progress"
+    '.msg-bubble',         // Chat bubble text
+    '.checklist-title',    // "YOUR NEXT STEPS"
+    '.checklist-item span', // Checklist item text
+    '.quick-chips .chip',   // Chat quick-reply chips
+    '.hero-eyebrow',       // "India's civic AI assistant"
+    '.hero-sub',           // Subtitle on landing
+  ];
+
+  const elements = Array.from(document.querySelectorAll(selectors.join(', ')))
+    .filter(el => el.innerText && el.innerText.trim().length > 1);
+
+  if (elements.length === 0) return;
+
+  const texts = elements.map(el => el.innerText.trim());
+  try {
+    const res = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ texts, targetLanguage: langCode })
+    });
+    const data = await res.json();
+    if (data.success && data.translations) {
+      elements.forEach((el, i) => {
+        if (data.translations[i]) el.innerText = data.translations[i];
+      });
+    }
+  } catch (e) { console.error('Translate error', e); }
+}
+

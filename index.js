@@ -21,6 +21,14 @@ const helmet  = require('helmet');
 const cors    = require('cors');
 require('dotenv').config();
 
+// ── Environment Validation ────────────────────────────────────────────
+const requiredEnv = ['GEMINI_API_KEY', 'GOOGLE_TTS_API_KEY', 'GOOGLE_CALENDAR_CLIENT_ID'];
+const missingEnv = requiredEnv.filter(key => !process.env[key]);
+if (missingEnv.length > 0) {
+  console.error(`[FATAL] Missing required environment variables: ${missingEnv.join(', ')}`);
+  process.exit(1);
+}
+
 const { DEFAULT_PORT } = require('./constants');
 
 // ── Route imports ─────────────────────────────────────────────────────
@@ -28,7 +36,8 @@ const askRoute       = require('./routes/ask');
 const ttsRoute       = require('./routes/tts');
 const boothRoute     = require('./routes/booth');
 const calendarRoute  = require('./routes/calendar');
-
+const authRoute      = require('./routes/auth');
+const translateRoute = require('./routes/translate');
 const app  = express();
 const PORT = process.env.PORT || DEFAULT_PORT;
 
@@ -46,7 +55,7 @@ app.use(
         scriptSrcAttr: ["'unsafe-inline'"],
         styleSrc:    ["'self'", 'https://fonts.googleapis.com', 'https://accounts.google.com', "'unsafe-inline'"],
         fontSrc:     ["'self'", 'https://fonts.gstatic.com'],
-        imgSrc:      ["'self'", 'data:', 'https://maps.googleapis.com', 'https://maps.gstatic.com'],
+        imgSrc:      ["'self'", 'data:', 'https://maps.googleapis.com', 'https://maps.gstatic.com', 'https://lh3.googleusercontent.com'],
         mediaSrc:    ["'self'", 'data:', 'blob:'],
         connectSrc:  ["'self'", 'https://accounts.google.com'],
         frameSrc:    ['https://accounts.google.com'],
@@ -80,7 +89,8 @@ app.use('/api/ask',       askRoute);
 app.use('/api/tts',       ttsRoute);
 app.use('/api/booth',     boothRoute);
 app.use('/api/calendar',  calendarRoute);
-
+app.use('/api/auth',      authRoute);
+app.use('/api/translate', translateRoute);
 // ── Health Check ──────────────────────────────────────────────────────
 app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok', service: 'udaanai', timestamp: new Date().toISOString() });

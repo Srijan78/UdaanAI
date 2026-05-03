@@ -1,0 +1,15 @@
+{
+  "registration": [
+    "Check eligibility (18+ years old)",
+    "Verify name in Electoral Roll at voters.eci.gov.in",
+    "Apply for registration (Form 6) if not registered",
+    "Keep Voter ID or alternative photo ID ready"
+  ],
+  "election_day": [
+    "Locate your polling booth",
+    "Check booth timing (usually 7 AM to 6 PM)",
+    "Bring valid photo ID",
+    "Follow queue and identify yourself to polling officers",
+    "Get ink on finger and cast vote on EVM"
+  ]
+}

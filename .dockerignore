@@ -1,0 +1,35 @@
+# .dockerignore
+#
+# Files excluded from the Docker build context.
+# Keeps the image lean and prevents secrets from leaking into the container.
+
+# ── Secrets ───────────────────────────────────────────────────────────
+.env
+*.env.local
+serviceAccountKey.json
+firebase-adminsdk*.json
+
+# ── Development artefacts ─────────────────────────────────────────────
+node_modules/
+coverage/
+.nyc_output/
+
+# ── Test files (not needed at runtime) ───────────────────────────────
+tests/
+
+# ── Git ───────────────────────────────────────────────────────────────
+.git/
+.gitignore
+
+# ── Editor ────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+
+# ── OS ────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Documentation / temporary ─────────────────────────────────────────
+*.md
+*.docx
+prd_extracted.txt

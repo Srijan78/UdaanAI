@@ -1,0 +1,26 @@
+{
+  "phases": [
+    {
+      "id": "registration",
+      "name": "Am I Ready?",
+      "deadline": "2024-05-01",
+      "description": "Ensure you are on the electoral roll."
+    },
+    {
+      "id": "election_day",
+      "name": "Election Day",
+      "date": "2024-05-13",
+      "description": "Cast your vote at your assigned polling booth."
+    },
+    {
+      "id": "after_voting",
+      "name": "After Voting",
+      "description": "Check results and track your representative."
+    }
+  ],
+  "states": [
+    { "name": "Tamil Nadu", "phase": 1, "date": "2024-04-19" },
+    { "name": "Maharashtra", "phase": 4, "date": "2024-05-13" },
+    { "name": "Uttar Pradesh", "phase": "Multiple", "date": "Apr-June 2024" }
+  ]
+}

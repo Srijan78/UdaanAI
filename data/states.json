@@ -1,0 +1,212 @@
+{
+  "Andhra Pradesh": {
+    "phase": 1,
+    "pollingDate": "2024-04-19",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 25,
+    "electoralRollUrl": "https://ceoandhra.nic.in"
+  },
+  "Arunachal Pradesh": {
+    "phase": 1,
+    "pollingDate": "2024-04-19",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 2,
+    "electoralRollUrl": "https://ceoarunachal.nic.in"
+  },
+  "Assam": {
+    "phase": "1-3",
+    "pollingDate": "2024-04-19 to 2024-05-07",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 14,
+    "electoralRollUrl": "https://ceoassam.nic.in"
+  },
+  "Bihar": {
+    "phase": "4-7",
+    "pollingDate": "2024-05-13 to 2024-06-01",
+    "registrationDeadline": "2024-04-12",
+    "totalSeats": 40,
+    "electoralRollUrl": "https://ceobihar.nic.in"
+  },
+  "Chhattisgarh": {
+    "phase": "1-3",
+    "pollingDate": "2024-04-19 to 2024-05-07",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 11,
+    "electoralRollUrl": "https://ceochhattisgarh.nic.in"
+  },
+  "Goa": {
+    "phase": 3,
+    "pollingDate": "2024-05-07",
+    "registrationDeadline": "2024-04-05",
+    "totalSeats": 2,
+    "electoralRollUrl": "https://ceogoa.nic.in"
+  },
+  "Gujarat": {
+    "phase": 3,
+    "pollingDate": "2024-05-07",
+    "registrationDeadline": "2024-04-05",
+    "totalSeats": 26,
+    "electoralRollUrl": "https://www.ceo.gujarat.gov.in"
+  },
+  "Haryana": {
+    "phase": 6,
+    "pollingDate": "2024-05-25",
+    "registrationDeadline": "2024-04-23",
+    "totalSeats": 10,
+    "electoralRollUrl": "https://ceoharyana.gov.in"
+  },
+  "Himachal Pradesh": {
+    "phase": 7,
+    "pollingDate": "2024-06-01",
+    "registrationDeadline": "2024-04-30",
+    "totalSeats": 4,
+    "electoralRollUrl": "https://himachal.nic.in/election"
+  },
+  "Jharkhand": {
+    "phase": "3-4",
+    "pollingDate": "2024-05-07 to 2024-05-13",
+    "registrationDeadline": "2024-04-05",
+    "totalSeats": 14,
+    "electoralRollUrl": "https://www.jharkhand.gov.in/ceo"
+  },
+  "Karnataka": {
+    "phase": "2-3",
+    "pollingDate": "2024-04-26 to 2024-05-07",
+    "registrationDeadline": "2024-03-25",
+    "totalSeats": 28,
+    "electoralRollUrl": "https://ceokarnataka.kar.nic.in"
+  },
+  "Kerala": {
+    "phase": 2,
+    "pollingDate": "2024-04-26",
+    "registrationDeadline": "2024-03-25",
+    "totalSeats": 20,
+    "electoralRollUrl": "https://www.ceo.kerala.gov.in"
+  },
+  "Madhya Pradesh": {
+    "phase": "1-4",
+    "pollingDate": "2024-04-19 to 2024-05-13",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 29,
+    "electoralRollUrl": "https://ceomadyapradesh.nic.in"
+  },
+  "Maharashtra": {
+    "phase": "4-5",
+    "pollingDate": "2024-05-13 to 2024-05-20",
+    "registrationDeadline": "2024-04-12",
+    "totalSeats": 48,
+    "electoralRollUrl": "https://ceo.maharashtra.gov.in"
+  },
+  "Manipur": {
+    "phase": "1-2",
+    "pollingDate": "2024-04-19 to 2024-04-26",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 2,
+    "electoralRollUrl": "https://ceomanipur.nic.in"
+  },
+  "Meghalaya": {
+    "phase": 2,
+    "pollingDate": "2024-04-26",
+    "registrationDeadline": "2024-03-25",
+    "totalSeats": 2,
+    "electoralRollUrl": "https://ceomeghalaya.nic.in"
+  },
+  "Mizoram": {
+    "phase": 1,
+    "pollingDate": "2024-04-19",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 1,
+    "electoralRollUrl": "https://ceomizoram.nic.in"
+  },
+  "Nagaland": {
+    "phase": 1,
+    "pollingDate": "2024-04-19",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 1,
+    "electoralRollUrl": "https://ceonagaland.nic.in"
+  },
+  "Odisha": {
+    "phase": "1-4",
+    "pollingDate": "2024-04-13 to 2024-05-13",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 21,
+    "electoralRollUrl": "https://ceoorissa.nic.in"
+  },
+  "Punjab": {
+    "phase": 7,
+    "pollingDate": "2024-06-01",
+    "registrationDeadline": "2024-04-30",
+    "totalSeats": 13,
+    "electoralRollUrl": "https://ceopunjab.nic.in"
+  },
+  "Rajasthan": {
+    "phase": "1-2",
+    "pollingDate": "2024-04-19 to 2024-04-26",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 25,
+    "electoralRollUrl": "https://ceorajasthan.nic.in"
+  },
+  "Sikkim": {
+    "phase": 1,
+    "pollingDate": "2024-04-19",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 1,
+    "electoralRollUrl": "https://ceosikkim.nic.in"
+  },
+  "Tamil Nadu": {
+    "phase": 1,
+    "pollingDate": "2024-04-19",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 39,
+    "electoralRollUrl": "https://www.elections.tn.gov.in"
+  },
+  "Telangana": {
+    "phase": 1,
+    "pollingDate": "2024-05-13",
+    "registrationDeadline": "2024-04-12",
+    "totalSeats": 17,
+    "electoralRollUrl": "https://ceotelangana.nic.in"
+  },
+  "Tripura": {
+    "phase": 1,
+    "pollingDate": "2024-04-19",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 2,
+    "electoralRollUrl": "https://ceotripura.nic.in"
+  },
+  "Uttar Pradesh": {
+    "phase": "1-7",
+    "pollingDate": "2024-04-19 to 2024-06-01",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 80,
+    "electoralRollUrl": "https://ceouttarpradesh.nic.in"
+  },
+  "Uttarakhand": {
+    "phase": 5,
+    "pollingDate": "2024-05-20",
+    "registrationDeadline": "2024-04-18",
+    "totalSeats": 5,
+    "electoralRollUrl": "https://ceo.uk.gov.in"
+  },
+  "West Bengal": {
+    "phase": "2-7",
+    "pollingDate": "2024-04-26 to 2024-06-01",
+    "registrationDeadline": "2024-03-25",
+    "totalSeats": 42,
+    "electoralRollUrl": "https://ceowestbengal.nic.in"
+  },
+  "Delhi": {
+    "phase": 6,
+    "pollingDate": "2024-05-25",
+    "registrationDeadline": "2024-04-23",
+    "totalSeats": 7,
+    "electoralRollUrl": "https://ceodelhitest.nic.in"
+  },
+  "Jammu and Kashmir": {
+    "phase": "1-5",
+    "pollingDate": "2024-04-19 to 2024-05-20",
+    "registrationDeadline": "2024-03-17",
+    "totalSeats": 5,
+    "electoralRollUrl": "https://ceojk.nic.in"
+  }
+}

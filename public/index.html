@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UdaanAI — Know your vote. Rise together.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+  <!-- Ashoka Wheel SVG Background -->
+  <!-- Ashoka Chakra: 24 spokes at exact 15° intervals, center=200,200 -->
+  <svg class="wheel-bg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer rim -->
+    <circle cx="200" cy="200" r="188" stroke="white" stroke-width="5"/>
+    <!-- Inner rim band -->
+    <circle cx="200" cy="200" r="178" stroke="white" stroke-width="1.5" opacity="0.4"/>
+    <!-- Hub ring -->
+    <circle cx="200" cy="200" r="22" stroke="white" stroke-width="3.5"/>
+    <!-- Hub center -->
+    <circle cx="200" cy="200" r="8" fill="white"/>
+    <!-- 24 spokes: each from hub edge (r=22) to inner rim (r=178), centered at 200,200 -->
+    <!-- All coords = 200 + r*cos(angle), 200 + r*sin(angle) -->
+    <line x1="222.0"  y1="200.0"  x2="378.0"  y2="200.0"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 0° -->
+    <line x1="221.25" y1="205.69" x2="371.91" y2="246.05" stroke="white" stroke-width="2" opacity="0.9"/><!-- 15° -->
+    <line x1="219.05" y1="211.0"  x2="354.15" y2="289.0"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 30° -->
+    <line x1="215.56" y1="215.56" x2="325.87" y2="325.87" stroke="white" stroke-width="2" opacity="0.9"/><!-- 45° -->
+    <line x1="211.0"  y1="219.05" x2="289.0"  y2="354.15" stroke="white" stroke-width="2" opacity="0.9"/><!-- 60° -->
+    <line x1="205.69" y1="221.25" x2="246.05" y2="371.91" stroke="white" stroke-width="2" opacity="0.9"/><!-- 75° -->
+    <line x1="200.0"  y1="222.0"  x2="200.0"  y2="378.0"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 90° -->
+    <line x1="194.31" y1="221.25" x2="153.95" y2="371.91" stroke="white" stroke-width="2" opacity="0.9"/><!-- 105° -->
+    <line x1="189.0"  y1="219.05" x2="111.0"  y2="354.15" stroke="white" stroke-width="2" opacity="0.9"/><!-- 120° -->
+    <line x1="184.44" y1="215.56" x2="74.13"  y2="325.87" stroke="white" stroke-width="2" opacity="0.9"/><!-- 135° -->
+    <line x1="180.95" y1="211.0"  x2="45.85"  y2="289.0"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 150° -->
+    <line x1="178.75" y1="205.69" x2="28.09"  y2="246.05" stroke="white" stroke-width="2" opacity="0.9"/><!-- 165° -->
+    <line x1="178.0"  y1="200.0"  x2="22.0"   y2="200.0"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 180° -->
+    <line x1="178.75" y1="194.31" x2="28.09"  y2="153.95" stroke="white" stroke-width="2" opacity="0.9"/><!-- 195° -->
+    <line x1="180.95" y1="189.0"  x2="45.85"  y2="111.0"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 210° -->
+    <line x1="184.44" y1="184.44" x2="74.13"  y2="74.13"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 225° -->
+    <line x1="189.0"  y1="180.95" x2="111.0"  y2="45.85"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 240° -->
+    <line x1="194.31" y1="178.75" x2="153.95" y2="28.09"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 255° -->
+    <line x1="200.0"  y1="178.0"  x2="200.0"  y2="22.0"   stroke="white" stroke-width="2" opacity="0.9"/><!-- 270° -->
+    <line x1="205.69" y1="178.75" x2="246.05" y2="28.09"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 285° -->
+    <line x1="211.0"  y1="180.95" x2="289.0"  y2="45.85"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 300° -->
+    <line x1="215.56" y1="184.44" x2="325.87" y2="74.13"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 315° -->
+    <line x1="219.05" y1="189.0"  x2="354.15" y2="111.0"  stroke="white" stroke-width="2" opacity="0.9"/><!-- 330° -->
+    <line x1="221.25" y1="194.31" x2="371.91" y2="153.95" stroke="white" stroke-width="2" opacity="0.9"/><!-- 345° -->
+  </svg>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SCREEN 1: LANDING
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="landing" class="screen">
+    <div class="lang-pills">
+      <span class="lang-pill">हिन्दी</span>
+      <span class="lang-pill">தமிழ்</span>
+      <span class="lang-pill">తెలుగు</span>
+      <span class="lang-pill">ಕನ್ನಡ</span>
+      <span class="lang-pill">മലയാളം</span>
+      <span class="lang-pill">বাংলা</span>
+      <span class="lang-pill">मराठी</span>
+      <span class="lang-pill">ਪੰਜਾਬੀ</span>
+      <span class="lang-pill">ગુજરાતી</span>
+    </div>
+    <p class="hero-eyebrow">India's civic AI assistant</p>
+    <h1 class="hero-title">
+      Know your<br>
+      <em>vote.</em> <span class="green">Rise</span><br>
+      together.
+    </h1>
+    <p class="hero-sub">Your personal guide to every step of voting — in your language.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="goToOnboarding()" aria-label="Start your voting journey">
+        <span>Begin your journey</span>
+        <span>→</span>
+      </button>
+      <button class="btn-ghost" onclick="handleLoginClick()" aria-label="Continue as Guest">
+        <span>👤</span>
+        <span>Continue as Guest</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SCREEN 2: ONBOARDING
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="onboarding" class="screen">
+    <div class="onboard-topbar">
+      <button class="back-btn" id="onboard-back-btn" onclick="goBack()" aria-label="Go back">
+        <span class="back-arrow">&#8249;</span>
+        <span>Back</span>
+      </button>
+    </div>
+    <div class="onboard-progress">
+      <div class="progress-dot active" id="pd1"></div>
+      <div class="progress-dot" id="pd2"></div>
+      <div class="progress-dot" id="pd3"></div>
+      <div class="progress-dot" id="pd4"></div>
+    </div>
+    <div id="onboard-content"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SCREEN 3: MAIN APP
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="app" class="screen">
+    <div class="app-layout">
+
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="back-btn topbar-back" onclick="goBackToOnboarding()" aria-label="Go back to onboarding">
+            <span class="back-arrow">&#8249;</span>
+            <span>Back</span>
+          </button>
+          <div class="topbar-brand">
+            Udaan<span class="dot">AI</span>
+          </div>
+        </div>
+        <div class="topbar-lang">
+          <span>Responding in</span>
+          <span class="lang-badge" id="active-lang-badge">हिन्दी</span>
+        </div>
+        <div class="topbar-user">
+          <div class="user-avatar" id="user-initial">U</div>
+        </div>
+      </header>
+
+      <!-- Left Sidebar -->
+      <aside class="sidebar-left">
+        <p class="sidebar-section-label">Navigation</p>
+        <div class="phase-item active" data-phase="1" onclick="switchPhase(1)">
+          <div class="phase-num">1</div>
+          <div class="phase-text">
+            <div class="phase-name">Am I ready?</div>
+            <div class="phase-desc">Registration & eligibility</div>
+          </div>
+        </div>
+        <div class="phase-item" data-phase="2" onclick="switchPhase(2)">
+          <div class="phase-num">2</div>
+          <div class="phase-text">
+            <div class="phase-name">Election Day</div>
+            <div class="phase-desc">What to expect at the booth</div>
+          </div>
+        </div>
+        <div class="phase-item" data-phase="3" onclick="switchPhase(3)">
+          <div class="phase-num">3</div>
+          <div class="phase-text">
+            <div class="phase-name">After Voting</div>
+            <div class="phase-desc">Results & your MP's role</div>
+          </div>
+        </div>
+        <div class="sidebar-divider"></div>
+        <p class="sidebar-section-label">Quick Actions</p>
+        <div class="phase-item" onclick="document.getElementById('chat-input').value='How do I find my polling booth?'; sendMessage();">
+          <div class="phase-num">🗺</div>
+          <div class="phase-text">
+            <div class="phase-name">Find My Booth</div>
+            <div class="phase-desc">Locate your polling station</div>
+          </div>
+        </div>
+        <div class="phase-item" onclick="addToCalendar()">
+          <div class="phase-num">📅</div>
+          <div class="phase-text">
+            <div class="phase-name">Add Reminder</div>
+            <div class="phase-desc">Google Calendar event</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Chat Area -->
+      <main class="chat-area">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-welcome" id="chat-welcome">
+            <div class="welcome-icon">🗳️</div>
+            <h2 class="welcome-title">नमस्ते! I'm UdaanAI</h2>
+            <p class="welcome-sub">Ask me anything about voting, registration, or your rights as a citizen. I'll guide you every step of the way.</p>
+            <div class="quick-chips">
+              <button class="chip" onclick="sendChip(this)" aria-label="Ask about first time voting">First time voter — what do I do?</button>
+              <button class="chip" onclick="sendChip(this)" aria-label="Ask about voter ID">Do I need a Voter ID?</button>
+              <button class="chip" onclick="sendChip(this)" aria-label="Ask about EVM">How does EVM work?</button>
+              <button class="chip" onclick="sendChip(this)" aria-label="Ask about NOTA">What is NOTA?</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing indicator -->
+        <div class="typing-indicator" id="typing-indicator" style="padding: 0 40px 16px;">
+          <div class="msg-avatar ai">🪄</div>
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-area">
+          <div class="input-wrapper">
+            <textarea
+              class="chat-input"
+              id="chat-input"
+              placeholder="Ask anything about voting in India…"
+              rows="1"
+              aria-label="Type your question about voting"
+              onkeydown="handleKey(event)"
+              oninput="autoResize(this)"
+            ></textarea>
+            <button class="input-btn mic-btn" id="mic-btn" onclick="toggleMic()" aria-label="Voice input">🎤</button>
+            <button class="input-btn send-btn" onclick="sendMessage()" aria-label="Send message">↑</button>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right Panel -->
+      <aside class="panel-right">
+        <div>
+          <p class="panel-section-label">Your Journey</p>
+          <div class="journey-phase active" id="journey-phase-1">
+            <div class="phase-dot"></div>
+            <div class="journey-phase-title">Phase 1 — Am I Ready?</div>
+            <div class="journey-step done">
+              <div class="step-check">✓</div>
+              <span>Eligibility confirmed</span>
+            </div>
+            <div class="journey-step active">
+              <div class="step-check"></div>
+              <span>Voter registration</span>
+            </div>
+            <div class="journey-step">
+              <div class="step-check"></div>
+              <span>Find polling booth</span>
+            </div>
+            <div class="journey-step">
+              <div class="step-check"></div>
+              <span>Set reminder</span>
+            </div>
+          </div>
+          <div class="journey-phase inactive" id="journey-phase-2">
+            <div class="phase-dot"></div>
+            <div class="journey-phase-title" style="color: var(--muted)">Phase 2 — Election Day</div>
+            <div class="journey-step">
+              <div class="step-check"></div>
+              <span>Know your booth location</span>
+            </div>
+            <div class="journey-step">
+              <div class="step-check"></div>
+              <span>Carry valid photo ID</span>
+            </div>
+            <div class="journey-step">
+              <div class="step-check"></div>
+              <span>Cast your vote on EVM</span>
+            </div>
+          </div>
+          <div class="journey-phase inactive" id="journey-phase-3">
+            <div class="phase-dot"></div>
+            <div class="journey-phase-title" style="color: var(--muted)">Phase 3 — After Voting</div>
+            <div class="journey-step">
+              <div class="step-check"></div>
+              <span>Track election results</span>
+            </div>
+            <div class="journey-step">
+              <div class="step-check"></div>
+              <span>Know your elected MP</span>
+            </div>
+            <div class="journey-step">
+              <div class="step-check"></div>
+              <span>Hold them accountable</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="stat-card">
+            <span class="stat-label">Days to vote</span>
+            <span class="stat-value">47<span class="unit">days</span></span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Progress</span>
+            <span class="stat-value">25<span class="unit">%</span></span>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+# ── Secrets — never commit these ─────────────────────────────────────
+.env
+*.env.local
+*.env.*.local
+
+# ── Node ─────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Test coverage ─────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── Build artefacts ───────────────────────────────────────────────────
+dist/
+build/
+
+# ── OS artefacts ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor directories ────────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ── Firebase service account key (if downloaded as file) ─────────────
+serviceAccountKey.json
+firebase-adminsdk*.json
+
+# ── Project Documents ─────────────────────────────────────────────────
+project_docs/
+
+# ── Archive files ─────────────────────────────────────────────────────
+*.rar
+*.zip
+*.7z

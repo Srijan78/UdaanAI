@@ -1,0 +1,10 @@
+{
+  "registration": [
+    { "q": "Can I vote if I don't have a Voter ID?", "a": "Yes, if your name is in the Electoral Roll, you can use Aadhaar, PAN, Passport, etc." },
+    { "q": "How do I check my name in the list?", "a": "Visit voters.eci.gov.in or use the Voter Helpline App." }
+  ],
+  "election_day": [
+    { "q": "What is VVPAT?", "a": "It's a printer-like device that shows a slip for 7 seconds to verify your vote." },
+    { "q": "Can I use my mobile inside the booth?", "a": "No, mobile phones are strictly prohibited inside the polling station." }
+  ]
+}

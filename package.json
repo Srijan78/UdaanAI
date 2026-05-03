@@ -1,0 +1,57 @@
+{
+  "name": "udaanai",
+  "version": "1.0.0",
+  "description": "India's civic AI assistant — Know your vote. Rise together.",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "jest --coverage --forceExit",
+    "test:watch": "jest --watch",
+    "lint": "echo 'No linter configured — add eslint if needed'"
+  },
+  "dependencies": {
+    "@google-cloud/text-to-speech": "^5.3.0",
+    "@google/generative-ai": "^0.15.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "firebase-admin": "^12.2.0",
+    "googleapis": "^144.0.0",
+    "helmet": "^7.1.0",
+    "node-cache": "^5.1.2",
+    "sanitize-html": "^2.13.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "routes/**/*.js",
+      "middleware/**/*.js",
+      "constants.js",
+      "index.js",
+      "!**/node_modules/**"
+    ],
+    "coverageThreshold": {}
+  },
+  "keywords": [
+    "civic-tech",
+    "govtech",
+    "india",
+    "voting",
+    "ai",
+    "gemini"
+  ],
+  "author": "UdaanAI Team",
+  "license": "MIT"
+}
